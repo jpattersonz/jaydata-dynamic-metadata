@@ -468,7 +468,7 @@ export class Metadata {
             if (d.baseType == '$data.Enum') {
                 dtsPart.push('    export class ' + d.typeName.split('.').pop() + ' extends $data.Enum {');
                 if (d.params[3] && Object.keys(d.params[3]).length > 0){
-                    Object.keys(d.params[3]).forEach(dp => dtsPart.push('        static ' + d.params[3][dp].name));
+                    Object.keys(d.params[3]).forEach(dp => dtsPart.push('        static ' + d.params[3][dp].name + ':any'));
                 }
                 srcPart += 'types["' + d.params[0] + '"] = $data.createEnum("' + d.params[0] + '", [\n' +
                     Object.keys(d.params[3]).map(dp => '  ' + this._createPropertyDefString(d.params[3][dp])).join(',\n') +
@@ -569,10 +569,9 @@ export class Metadata {
         }else if (type == this.options.collectionBaseType){
             return elementType + '[]';
         }else if (type == '$data.ServiceAction'){
-            return '{ (' + (definition.params.length > 0 ? definition.params.map(p => p.name + ': ' + this._typeToTS(p.type, p.elementType, p)).join(', ') : '') + '): Promise<void>; }';
+            return '{ (' + (definition.params.length > 0 ? definition.params.map(p => p.name + ': ' + this._typeToTS(p.type, p.elementType, p)).join(', ') : '') + '): $data.Promisable<void>; }';
         }else if (type == '$data.ServiceFunction'){
-            //queryable instead of promise
-            return '{ (' + (definition.params.length > 0 ? definition.params.map(p => p.name + ': ' + this._typeToTS(p.type, p.elementType, p)).join(', ') : '') + '): Promise<' + this._typeToTS(definition.returnType, definition.elementType, definition) + '>; }';
+            return '{ (' + (definition.params.length > 0 ? definition.params.map(p => p.name + ': ' + this._typeToTS(p.type, p.elementType, p)).join(', ') : '') + '): $data.Promisable<' + definition.elementType + (definition.returnType == '$data.Queryable' ? '[]' : '') + '>; }';
         }else return type;
     }
 

@@ -73,10 +73,12 @@
     "chai": "^3.5.0",
     "gulp": "^3.9.1",
     "gulp-mocha": "^2.2.0",
-    "jaydata": "^1.5.2"
+    "jaydata": "^1.5.2",
+    "typescript": "^1.8.10"
   },
   "scripts": {
-    "test": "mocha tests"
+    "test": "mocha tests",
+    "tsc": "tsc"
   },
   "typings": "lib/service.d.ts"
 }
